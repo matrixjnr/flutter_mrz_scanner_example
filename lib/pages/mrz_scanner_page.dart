@@ -12,6 +12,7 @@ class MRZScannerPage extends StatefulWidget {
 }
 
 class _MRZScannerPageState extends State<MRZScannerPage> {
+  bool isParsed = false;
   MRZController? _controller;
   bool _isScanning = true;
 
@@ -25,8 +26,9 @@ class _MRZScannerPageState extends State<MRZScannerPage> {
         onControllerCreated: (controller) {
           _controller = controller;
 
-          // Directly access fields using dot notation
-          _controller?.onParsed = (data) {
+          _controller?.onParsed = (data) async {
+            if (isParsed) return;
+            isParsed = true;
             final result = MRZResult(
               documentType: data.documentType ?? '',
               countryCode: data.countryCode ?? '',
@@ -42,10 +44,15 @@ class _MRZScannerPageState extends State<MRZScannerPage> {
             );
 
             setState(() => _isScanning = false);
+            print("Result: $result");
             widget.onScanned(result);
           };
 
-          _controller?.onError = (error) => print(error);
+          _controller?.onError = (error) {
+            print('Error: $error');
+            setState(() => _isScanning = false);
+          };
+
           _controller?.startPreview();
         },
       )

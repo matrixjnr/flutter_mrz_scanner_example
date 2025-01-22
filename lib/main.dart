@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mrz_flutter_example/pages/camera_page.dart';
 import 'package:mrz_flutter_example/pages/passport_form_page.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: PassportFormPage(),
+      // home: CameraPage(),
     );
   }
 }
